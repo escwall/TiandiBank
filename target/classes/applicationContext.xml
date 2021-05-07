@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- 加载配置文件 *.properties -->
+    <context:property-placeholder
+            location="classpath:jdbcConfig.properties"/>
+
+    <!--配置数据库 dataSource -->
+    <bean id="dataSource"
+          class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <!-- 加载数据库用户名 -->
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <!-- 加载数据库密码 -->
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <!-- 加载数据库连接 -->
+        <property name="user" value="${jdbc.username}"/>
+        <!-- 加载数据库驱动 -->
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!-- 配置sqlSessionFactory -->
+    <bean id="sqlSessionFactoryBean"
+          class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 配置数据源 引用（ref）dataSource（bean） -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 加载mybatis 配置文件 -->
+        <property name="configLocation"
+                  value="classpath:mybatis.xml"/>
+        <property name="mapperLocations" value="classpath:com/bank/dao/mapper/*Mapper.xml"/>
+    </bean>
+
+    <!-- 配置扫描包 加载mapper代理对象 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 扫描mapper路径 -->
+        <property name="basePackage" value="com.bank.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"/>
+    </bean>
+
+    <!-- 扫描Service包 -->
+    <context:component-scan
+            base-package="com.bank.service"/>
+
+    <!--配置spring声明式事务管理-->
+    <!--配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--配置事务通知-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!--所有find开头（查询）的方法设置只读-->
+            <tx:method name="find*" read-only="true"/>
+            <!--事务的隔离级别，默认default-->
+            <tx:method name="*" isolation="DEFAULT"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--配置aop增强-->
+    <aop:config>
+        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.bank.service.impl.*.*(..))"></aop:advisor>
+    </aop:config>
+
+</beans>

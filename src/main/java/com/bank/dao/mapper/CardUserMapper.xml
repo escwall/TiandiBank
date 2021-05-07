@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bank.dao.CardUserDao">
+
+    <select id="showAllAccounts" resultType="com.bank.entity.CardUser">
+        select cardNumber,balance,state,name,phoneNumber from card natural join user_information
+    </select>
+
+    <select id="showActivatedAccounts" resultType="com.bank.entity.CardUser">
+        select cardNumber,balance,state,name,phoneNumber from card natural join user_information
+        where state='activated'
+    </select>
+
+    <select id="showFrozenAccounts" resultType="com.bank.entity.CardUser">
+        select cardNumber,balance,state,name,phoneNumber from card natural join user_information
+        where state='frozen'
+    </select>
+
+    <select id="showNameByCard" resultType="String" parameterType="String">
+        select name from card natural join user_information
+        where cardNumber=#{cardNumber}
+    </select>
+
+    <select id="showCardByPhone" resultType="CardUser" parameterType="String">
+        select cardNumber,name,state,balance,phoneNumber from card natural join user_information
+        where phoneNumber=#{phoneNumber}
+    </select>
+
+    <update id="setState" parameterType="String">
+        update card set state = case when (state != 'activated')
+            then 'activated'
+            else 'frozen'
+            end
+            where cardNumber=#{cardNumber}
+    </update>
+
+    <select id="getStateByCardNumber" parameterType="String" resultType="String">
+        select state from card where cardNumber=#{cardNumber}
+    </select>
+
+    <delete id="delete" parameterType="String">
+        delete from card where cardNumber=#{cardNumber}
+    </delete>
+
+</mapper>

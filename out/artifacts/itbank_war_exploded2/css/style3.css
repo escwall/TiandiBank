@@ -1,0 +1,103 @@
+body {
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    background: #ededed;
+}
+
+.content {
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 950px;
+    height: 600px;
+    margin: -300px 0 0 -450px;
+    background: #fff;
+    /* border: solid 10px pink; */
+}
+
+.img {
+    overflow: hidden;
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 260px;
+    height: 100%;
+    padding-top: 360px;
+    background-image: url(../images/mainPage.jpg);
+}
+
+.biao {
+    position: absolute;
+    top: 20px;
+    left: 400px;
+    font-size: 20px;
+}
+
+.btn4 {
+    position: absolute;
+    top: 200px;
+    left: 400px;
+    background: #d4af7a;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 100px;
+    font-size: 20px;
+}
+
+.btn {
+    position: absolute;
+    top: 250px;
+    left: 400px;
+    background: #d4af7a;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 100px;
+    font-size: 20px;
+}
+
+.btn5 {
+    position: absolute;
+    top: 400px;
+    left: 400px;
+    background: #d4af7a;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 100px;
+    font-size: 20px;
+}
+
+.btn3 {
+    position: absolute;
+    top: 350px;
+    left: 400px;
+    background: #d4af7a;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 100px;
+    font-size: 20px;
+}
+
+.btn2 {
+    position: absolute;
+    top: 300px;
+    left: 400px;
+    background: #d4af7a;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 100px;
+    font-size: 20px;
+}
+
+.tb {
+    position: absolute;
+    top: 40px;
+    left: 300px;
+    width: 60%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: solid rgba(156, 150, 150, 0.144) 1px;
+}

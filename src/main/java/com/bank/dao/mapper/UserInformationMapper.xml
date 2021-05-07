@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bank.dao.UserInformationDao">
+
+    <insert id="openAccount" parameterType="UserInformation">
+        insert into user_information (name, sex, birthday, phoneNumber, idNumber, payPassword)
+        values (#{name},#{sex},#{birthday},#{phoneNumber},#{idNumber},#{payPassword})
+    </insert>
+
+    <select id="checkAccount" parameterType="String" resultType="UserInformation">
+        select * from user_information where phoneNumber=#{phoneNumber}
+    </select>
+    
+    <select id="checkIdNum" parameterType="String" resultType="UserInformation">
+        select * from user_information where idNumber=#{idNumber}
+    </select>
+
+</mapper>

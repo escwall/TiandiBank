@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org.dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 开启二级缓存 -->
+    <settings>
+        <!-- 是否开启二级缓存 默认为true -->
+        <setting name="cacheEnabled" value="true"/>
+        <!-- 是否懒加载 -->
+        <setting name="lazyLoadingEnabled" value="true"/>
+    </settings>
+
+    <typeAliases>
+        <!--批量配置别名-->
+        <package name="com.bank.entity"/>
+    </typeAliases>
+    <environments default="mysql">
+        <environment id="mysql">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/internetbank?serverTimezone=Asia/Shanghai"/>
+                <property name="username" value="root"/>
+                <property name="password" value="a112358"/>
+            </dataSource>
+        </environment>
+    </environments>
+<!--    <mappers>-->
+<!--        <mapper resource="com/bank/dao/mapper/CardUserMapper.xml"></mapper>-->
+<!--    </mappers>-->
+    
+    
+
+</configuration>

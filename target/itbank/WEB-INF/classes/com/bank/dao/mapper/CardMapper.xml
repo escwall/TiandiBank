@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bank.dao.CardDao">
+
+    
+    <select id="showAll" resultType="com.bank.entity.Card">
+        select * from card
+    </select>
+
+    <select id="getBalance" resultType="Double" parameterType="Map">
+        select balance from card natural join user_information
+        <where>
+            cardNumber=#{cn} and payPassword=#{pw}
+        </where>
+    </select>
+
+    <select id="getState" resultType="String" parameterType="String">
+        select state from card where cardNumber=#{cardNumber}
+    </select>
+
+    <update id="deposit" parameterType="Map">
+        update card natural join user_information
+        <set>
+            <if test="amount > 0">
+                balance=balance+#{amount}
+            </if>
+        </set>
+        <where>
+            name=#{name} and cardNumber=#{cn}
+        </where>
+    </update>
+
+    <update id="withdraw" parameterType="Map">
+        update card natural join user_information
+        <set>
+            balance=balance-#{amount}
+        </set>
+        <where>
+            balance>=#{amount} and cardNumber=#{cn} and payPassword=#{pw}
+        </where>
+    </update>
+
+</mapper>

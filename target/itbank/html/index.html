@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <title>天地银行</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="content">
+        <div class="form sign-in">
+            <h2>欢迎回来</h2>
+            <form action="https://localhost:8080/oa/login" method="GET">
+                <label>
+                    <span>账户</span>
+                    <input type="text" name="username" value="请输入您的账户" />
+                </label>
+                <label>
+                    <span>密码</span>
+                    <input type="password" name="password" />
+                </label>
+                <p class="forgot-pass"><a href="#">忘记密码？</a></p>
+                <p class="forgot-pass"><a href="/html/guanliyu.html">管理员登录</a></p>
+                <button type="button" class="submit"><input type="submit" class="submit1"value="登 录"></button>
+
+            </form>
+        </div>
+        <div class="sub-cont">
+            <div class="img">
+                <div class="img__text m--up">
+                    <h2>还未注册？</h2>
+                    <p>立即注册，享受生活！</p>
+                </div>
+                <div class="img__text m--in">
+                    <h2>已有帐号？</h2>
+                    <p>现在起即刻享受功能！</p>
+                </div>
+                <div class="img__btn">
+                    <span class="m--up">注 册</span>
+                    <span class="m--in">登 录</span>
+                </div>
+            </div>
+            <div class="form sign-up">
+                <h2>立即注册</h2>
+                <form action="https://localhost:8080/oa/lll" method="GET">
+                    <label>
+                        <span>账户</span>
+                        <input type="text" name="username"/>
+                    </label>
+                    <label>
+                        <span>密码</span>
+                        <input type="password" name = "password"/>
+                    </label>
+                    <button type="button" class="submit"><input type="submit" value="注册"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+
+    <div style="text-align:center;"></div>
+</body>
+
+</html>
