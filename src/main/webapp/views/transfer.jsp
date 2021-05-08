@@ -210,10 +210,10 @@
                         }
 
                     })
-                } else alert("The transfer was failed!");
+                } else alert("The transfer was failed! Maybe caused by wrong payment password or insufficient balance.");
             },
             error: function () {
-                alert("The transfer was failed!");
+                alert("The transfer was failed! Check receiver information!");
             }
         })
         $("#sendNum").val("");
