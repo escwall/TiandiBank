@@ -1,7 +1,8 @@
 # TiandiBank
 A9 web project XDU 2021 spring
 
-~~Our project has been deployed to the server(url:http://39.106.59.251)~~(Server has expired)
+~~Our project has been deployed to the server(url:http://39.106.59.251)~~ (Server has expired)
+
 Sir, you can use following accounts to use this online bank system.
 
 
