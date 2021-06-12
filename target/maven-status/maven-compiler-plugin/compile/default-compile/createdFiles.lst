@@ -1,6 +1,7 @@
 com\bank\dao\CardDao.class
 com\bank\controller\AdminController.class
 com\bank\entity\Card.class
+com\bank\entity\Loan.class
 com\bank\service\impl\OpenAccountServiceImpl.class
 com\bank\service\impl\LoginServiceImpl.class
 com\bank\service\LoginService.class
@@ -9,6 +10,10 @@ com\bank\dao\UserInformationDao.class
 com\bank\controller\LoginController.class
 com\bank\entity\TradeRecord.class
 com\bank\controller\TransferController.class
+com\bank\controller\LoanController.class
+com\bank\service\impl\LoanServiceImpl.class
+com\bank\dao\LoanDao.class
+com\bank\entity\PageInfo.class
 com\bank\dao\AdminDao.class
 com\bank\dao\TradeRecordDao.class
 com\bank\controller\TradeRecordController.class
@@ -17,8 +22,10 @@ com\bank\service\TradeRecordService.class
 com\bank\entity\CardUser.class
 com\bank\entity\UserInformation.class
 com\bank\service\impl\TransferServiceImpl.class
+com\bank\entity\Page.class
 com\bank\entity\Admin.class
 com\bank\service\AdminService.class
+com\bank\service\LoanService.class
 com\bank\service\OpenAccountService.class
 com\bank\dao\CardUserDao.class
 com\bank\controller\OpenAccountController.class

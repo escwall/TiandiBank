@@ -15,7 +15,7 @@
             box-sizing: border-box;
         }
         body{
-            background-image: url("../images/register.jpg");
+            background-image: url("../images/bg7.jpg");
             background-repeat: no-repeat;
             background-size: 100%;
         }
@@ -159,7 +159,7 @@
 
                     <tr>
                         <td class="dataTableLeft"><label><b>id number</b></label></td>
-                        <td  class="dataTableRight"><input type="text" placeholder="length should be 18" id="idNum"
+                        <td  class="dataTableRight"><input type="text" placeholder="length should be 18" id="idNum" pattern="[0-9]{17}[0-9|X]"
                                                            name="idNumber" required="required" min="18" max="18" onblur="checkIdNum()">
 
                         </td>

@@ -56,10 +56,11 @@ public class LoginController {
     public String login(Login user, Model model) {
         // 调用注入的 usersService 调用 login 方法
         model.addAttribute("phoneNumber",user.getPhoneNumber());
-        if(loginService.checkAccount(user.getPhoneNumber()) == null)
-            return "openAccount";
         if(loginService.login(user)) {
-            return "mainPage";
+            if(loginService.checkAccount(user.getPhoneNumber()) == null)
+                return "openAccount";
+            else
+                return "framework";
         }
         else {
             return "../index";
@@ -86,6 +87,26 @@ public class LoginController {
     public String ckLogin(Login login) {
         if(loginService.login(login)) return "{\"ck\":\"true\"}";
         else return "{\"ck\":\"false\"}";
+    }
+
+    @RequestMapping("getPw")
+    @ResponseBody
+    public String getPwByPhone(String phoneNumber) {
+        return "{\"pw\":\"" + loginService.getPwByPhone(phoneNumber) + "\"}";
+    }
+
+    @RequestMapping("changePw")
+    @ResponseBody
+    public String changePw(String newPw, String phoneNumber) {
+        if(loginService.changePw(newPw, phoneNumber) == 1) return "{\"ck\":\"true\"}";
+        else return "{\"ck\":\"false\"}";
+    }
+
+    @RequestMapping("getLoanRate")
+    @ResponseBody
+    public String getLoanRate() {
+        Double rate = loginService.getLoanRate();
+        return "{\"rate\":"+ rate + "}";
     }
     
 }

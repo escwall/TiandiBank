@@ -45,4 +45,19 @@ public class LoginServiceImpl implements LoginService {
     public UserInformation checkAccount(String phoneNumber) {
         return userInformationDao.checkAccount(phoneNumber);
     }
+
+    @Override
+    public String getPwByPhone(String phoneNumber) {
+        return loginDao.getPwByPhone(phoneNumber);
+    }
+
+    @Override
+    public Integer changePw(String newPw, String phoneNUmber) {
+        return loginDao.changePw(newPw, phoneNUmber);
+    }
+
+    @Override
+    public Double getLoanRate() {
+        return loginDao.getLoanRate();
+    }
 }

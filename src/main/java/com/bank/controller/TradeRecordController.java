@@ -3,6 +3,7 @@ package com.bank.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.bank.entity.PageInfo;
 import com.bank.entity.TradeRecord;
 import com.bank.service.TradeRecordService;
 import com.bank.service.TransferService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("tradeRecord")

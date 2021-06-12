@@ -1,6 +1,23 @@
 body {
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-    background: #ededed;
+    /*background: #ededed;
+    background-image:url(../images/twt.jpg) ;
+    width: 2048px;
+    height: 1536px;
+    background-repeat: no-repeat;
+    background-size: 100%;*/
+    background: url(../images/bg7.jpg)  no-repeat center 0px;
+    background-size: cover;
+
+
+
+    background-position: center 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    -moz-background-size: cover;
+    -ms-background-size: cover;
 }
 
 .content {
@@ -16,6 +33,7 @@ body {
 }
 
 .img {
+
     overflow: hidden;
     z-index: 2;
     position: absolute;
@@ -74,7 +92,7 @@ td {
 .back {
     position: absolute;
     top: 600px;
-    left: 600px;
+    left: 650px;
     background: #d4af7a;
     text-transform: uppercase;
     text-decoration: none;

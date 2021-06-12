@@ -35,4 +35,14 @@
 
 
 </body>
+<script>
+    window.onload = function stay()
+    {
+        console.log(document.URL);
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        })
+    }
+</script>
 </html>

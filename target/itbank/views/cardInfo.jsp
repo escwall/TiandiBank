@@ -30,7 +30,7 @@
 
         </tbody>
     </table>
-    <a href="../views/mainPage.jsp"> <button class="back">Go Back</button></a>
+    <a href="../views/framework.jsp"> <button class="back">Go Back</button></a>
 </div>
 
 <script>
@@ -58,7 +58,7 @@
                     var td3 = document.createElement('td');
                     td3.innerHTML=data[i].name;
                     var td4 = document.createElement('td');
-                    td4.innerHTML=data[i].balance;
+                    td4.innerHTML=Math.round(data[i].balance*100)/100;
                     var td5 = document.createElement('td');
                     td5.innerHTML=data[i].state;
                     var td8 = document.createElement('td');
@@ -76,6 +76,6 @@
 </script>
 
 
-<script src="/js/jquery-3.6.0.min.js"></script>
+<script src="../js/jquery-3.6.0.min.js"></script>
 </body>
 </html>

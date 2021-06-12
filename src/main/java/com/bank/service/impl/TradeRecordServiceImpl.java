@@ -1,6 +1,7 @@
 package com.bank.service.impl;
 
 import com.bank.dao.TradeRecordDao;
+import com.bank.entity.PageInfo;
 import com.bank.entity.TradeRecord;
 import com.bank.service.TradeRecordService;
 import org.springframework.beans.factory.annotation.Autowired;

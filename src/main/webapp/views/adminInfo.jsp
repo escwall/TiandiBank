@@ -26,7 +26,7 @@
 
 <body>
 
-<script src="/js/jquery-3.6.0.min.js"></script>
+<script src="../js/jquery-3.6.0.min.js"></script>
 <div class="content">
     <div class="img">
         <button class="btn">+Management</button>
@@ -46,6 +46,7 @@
             <li>
                 <button class="btn6" onclick="showRecords()">check trade records</button>
             </li>
+
             <li>
                 <form action="/admin/logout">
                 <button class="btn4">Exit</button>
@@ -92,7 +93,9 @@
             <tbody>
 
             </tbody>
+            <tr><td><div id="barcon"></div></td></tr>
         </table>
+
     </div>
 
     <div>
@@ -100,10 +103,11 @@
             <p id="showRate"></p>
             <p>
                 <label>Alter it to</label>
-                <input type="number" name="interestRate" required="required" step="0.1" min="0.1"/>%
+                <input type="number" name="interestRate" id="irate" required="required" step="0.1" min="0.1" max="5"/>%
             </p>
-            <button type="submit" class="open">confirm</button>
+            <button type="submit" class="open" onsubmit="return checkRate()">confirm</button>
         </form>
+    </div>
     </div>
 </div>
 
@@ -139,7 +143,14 @@
         hideRateTable();
         showActivated();
     });
-
+    function checkRate() {
+        var rate = document.getElementById("irate").value;
+        if (rate < 0 || rate > 5) {
+            alert("Interest rate is illegal!");
+            return false;
+        }
+        return true;
+    }
     function changeState(obj) {
         var block = $(obj).parent().parent().find("td");
         var td5 = block.eq(5);
@@ -190,7 +201,6 @@
         url:"/admin/showAllAccounts",
         dataType:"json",
         success: function (data) {
-            // console.log(data);
             var j = 1;
             var tb = document.createElement('tbody');
             pNode.appendChild(tb);
@@ -203,7 +213,8 @@
                 var td2 = document.createElement('td');
                 td2.innerHTML=data[i].cardNumber;
                 var td3 = document.createElement('td');
-                td3.innerHTML=data[i].balance;
+                var s = data[i].balance.toString();
+                td3.innerHTML=s.substring(0,s.indexOf(".")+3);
                 var td4 = document.createElement('td');
                 td4.innerHTML=data[i].name;
                 var td5 = document.createElement('td');
@@ -263,7 +274,7 @@
                     var td2 = document.createElement('td');
                     td2.innerHTML=data[i].cardNumber;
                     var td3 = document.createElement('td');
-                    td3.innerHTML=data[i].balance;
+                    td3.innerHTML=Math.round(data[i].balance*100)/100;
                     var td4 = document.createElement('td');
                     td4.innerHTML=data[i].name;
                     var td5 = document.createElement('td');
@@ -323,7 +334,7 @@
                     var td2 = document.createElement('td');
                     td2.innerHTML=data[i].cardNumber;
                     var td3 = document.createElement('td');
-                    td3.innerHTML=data[i].balance;
+                    td3.innerHTML=Math.round(data[i].balance*100)/100;
                     var td4 = document.createElement('td');
                     td4.innerHTML=data[i].name;
                     var td5 = document.createElement('td');
@@ -394,11 +405,105 @@
         return date.toJSON().substr(0, 19).replace('T', ' ');
     }
 
+    // function showRecords() {
+    //         $("#tb1")[0].style.display="none";
+    //         $("#tb2")[0].style.display="block";
+    //         $("#rateTable")[0].style.display="none";
+    //         var pNode = $("#tb2")[0];
+    //         var tbody = document.getElementsByTagName("tbody")[1];
+    //         if(tbody)
+    //             pNode.removeChild(tbody);
+    // }
+
+    //     function showRecords(){
+    //         $("#tb1")[0].style.display="none";
+    //         $("#tb2")[0].style.display="block";
+    //         $("#rateTable")[0].style.display="none";
+    //         var pNode = $("#tb2")[0];
+    //         var tbody = document.getElementsByTagName("tbody")[1];
+    //         if(tbody)
+    //             pNode.removeChild(tbody);
+    //     $.ajax({
+    //         url:"/tradeRecord/getAllRecords",
+    //         type:"post",
+    //         success: function(data){
+    //             var obj=eval(data);
+    //             var tbody=$('<tbody></tbody>');
+    //             $(obj).each(function (index){
+    //                 var val=obj[index];
+    //                 var tr=$('<tr></tr>');
+    //                 tr.append('<td>'+ val.senderCardNumber + '</td>' + '<td>'+ val.senderName + '</td>' +'<td>'+ val.receiverCardNumber + '</td>'+'<td>'+ val.receiverName+ '</td>'+'<td>'+ val.amount+ '</td>'+'<td>'+ val.type+ '</td>'+'<td>time('+ val.time+ ')</td>');
+    //                 tbody.append(tr);
+    //             });
+    //             $('#dataList tbody').replaceWith(tbody);
+    //
+    //             goPage(1,8)
+    //
+    //         }
+    //     });
+    // };
+
+
+        /**
+        * 分页函数
+        * pno--页数
+        * psize--每页显示记录数
+        * 分页部分是从真实数据行开始，因而存在加减某个常数，以确定真正的记录数
+        * 纯js分页实质是数据行全部加载，通过是否显示属性完成分页功能
+        **/
+        function goPage(pno,psize){
+        var itable = document.getElementById("tb2");
+        var num = itable.rows.length;//表格所有行数(所有记录数)
+        var totalPage = 0;//总页数
+        var pageSize = psize;//每页显示行数
+        //总共分几页
+        if((num-1)/pageSize > parseInt((num-1)/pageSize)){
+        totalPage=parseInt((num-1)/pageSize)+1;
+    }else{
+        totalPage=parseInt((num-1)/pageSize);
+    }
+        var currentPage = pno;//当前页数
+        var startRow = (currentPage - 1) * pageSize+1;//开始显示的行
+        var endRow = currentPage * pageSize;//结束显示的行
+        endRow = (endRow > num)? num : endRow;
+        //遍历显示数据实现分页
+        for(var i=1;i<num;i++){
+        var irow = itable.rows[i];
+        if(i>=startRow && i<endRow){
+        irow.style.display ="";
+    }else{
+        irow.style.display ="none";
+    }
+    }
+
+        var tempStr = "共 "+(num-1)+" 条记录        分 "+totalPage+" 页        当前第 "+currentPage+" 页";
+        if(currentPage>1){
+        tempStr += "<a href=\"#\" onClick=\"goPage("+(1)+","+psize+")\">                首页</a>";
+        tempStr += "<a href=\"#\" onClick=\"goPage("+(currentPage-1)+","+psize+")\">                <上一页</a>"
+    }else{
+        tempStr += "                首页";
+        tempStr += "                <上一页";
+    }
+        if(currentPage<totalPage){
+        tempStr += "<a href=\"#\" onClick=\"goPage("+(currentPage+1)+","+psize+")\">              下一页></a>";
+        tempStr += "<a href=\"#\" onClick=\"goPage("+(totalPage)+","+psize+")\">                尾页</a>";
+    }else{
+        tempStr += "                下一页>";
+        tempStr += "                尾页";
+    }
+        document.getElementById("barcon").innerHTML = tempStr;
+    }
+
+
+
     function showRecords() {
         $("#tb1")[0].style.display="none";
         $("#tb2")[0].style.display="block";
         $("#rateTable")[0].style.display="none";
-        var pNode = $("#tb2")[0];
+        var pNode = document.getElementById("tb2");
+        var tbody = document.getElementsByTagName("tbody")[2];
+        if(tbody)
+            pNode.removeChild(tbody);
         $.ajax({
             url:"/tradeRecord/getAllRecords",
             dataType:"json",

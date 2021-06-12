@@ -1,360 +1,190 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiandi Bank</title>
-    <link rel="stylesheet" href="../css/style4.css?v=<%= System.currentTimeMillis()%>">
-    <style>
-        .open,
-        .dele
-        {
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #fff;
-            background: #03a9f4;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-    </style>
-</head>
-
-<body>
-
-<script src="/js/jquery-3.6.0.min.js"></script>
-<div class="content">
-    <div class="img">
-        <button class="btn">+Management</button>
-        <ul class="uu">
-            <li>
-                <button class="btn1">All accounts</button>
-            </li>
-            <li>
-                <button class="btn2">Frozen accounts</button>
-            </li>
-            <li>
-                <button class="btn3">Activated accounts</button>
-            </li>
-            <li>
-                <button class="btn4" onclick="history.go(-1)">Exit</button>
-            </li>
-            <li>
-                <button class="btn5" onclick="showRateTable()">alter interest rate</button>
-            </li>
-        </ul>
-
-
-    </div>
-
-
-    <div>
-        <table class="tb" id="tb1">
-            <thead>
-            <tr>
-                <th>No.</th>
-                <th>phoneNumber</th>
-                <th>Account</th>
-                <th>Balance</th>
-                <th>Name</th>
-                <th>State</th>
-                <%--                <th>Operation</th>--%>
-            </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
-    </div>
-
-    <div>
-        <form id="rateTable" action="/admin/changeRate" method="post" class="tb" style="display: none">
-            <p>
-                <label>interest rate:</label>
-                <input type="number" name="interestRate" required="required" step="0.001" min="0.001"/>
-            </p>
-            <button type="submit" class="open">confirm</button>
-        </form>
+<!--搜索列表-->
+<div class="search">
+    <div class="container">
+        <div class="searchList">
+            <table id="searchList">
+                <!--<tr>
+                    <td>
+                        <a href="">
+                        <p class="title">正标题</p>
+                        <p class="className"><span>所属分类</span><em class="date">2019-01-01</em></p>
+                        <p class="detail">搜索详细信息展示，要考虑没有的情况下，不显示只显示标题</p>
+                        </a>
+                    </td>
+                </tr>-->
+            </table>
+            <div class="pageRow">
+                <div id="pageination"></div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-    var btn = document.querySelector('.btn');
-    var uu = document.querySelector('.uu');
-    var btn1 = document.querySelector('.btn1');
-    var btn2 = document.querySelector('.btn2');
-    var btn3 = document.querySelector('.btn3');
-    var flag = 0;
-    var f = 0;
-    btn.addEventListener('click', function() {
-        if (flag == 0) {
-            uu.style.display = 'block';
-            btn.innerHTML = "-Management";
-            flag = 1;
-        } else {
-            uu.style.display = 'none';
-            btn.innerHTML = "+Management";
-            flag = 0;
-        }
-    });
+//鼠标点击的时候搜索
+function searchAction() {
+var serchId=$('#serchId').val();
+$.ajax({
+type:"post",
+url:"Web/search",
+data:{"search":serchId},
+success:function (data) {
+if(data.total!=0){
+$('#searchList').empty();
+$.each(data.list,function (i,obj) {
+var lielem='<tr>\n' +
+    '                    <td>\n' +
+        '                        <a href="'+obj.url+'">\n' +
+            '                        <p class="title">'+obj.title+'</p>\n' +
+            '                        <p class="className" id="className'+i+'"></p>\n' +
+            '                        <p class="detail" id="detail'+i+'"></p>\n' +
+            '                        </a>\n' +
+        '                    </td>\n' +
+    '                </tr>';
+$('#searchList').append(lielem);
+if(obj.className!= null){
+var spanElem='<span>'+obj.className+'</span>';
+$('#className'+i).append(spanElem);
+}
+if(obj.creatTime!=null){
+var emElem='<em>'+obj.creatTime+'</em>';
+$('#className'+i).append(emElem);
+}
+if(obj.detail != undefined || obj.detail != null){
+var detailElem='<p>'+obj.detail+'</p>';
+$('#detail'+i).append(detailElem);
+}
 
-    btn1.addEventListener('click', function () {
-        hideRateTable();
-        showAccounts();
-    });
-    btn2.addEventListener('click', function () {
-        hideRateTable();
-        showFrozen();
-    });
-    btn3.addEventListener('click', function () {
-        hideRateTable();
-        showActivated();
-    });
+})
+//位置1  对数据进行分页
+$('#pageination').show();
+pagination(3,1);
+}else{
+$('#searchList').empty();
+var strNull='<p style="text-align: center;line-height: 50px">暂无相关搜索结果</p>' +
+'<p style="text-align: center"><a href="index.html"><button id="btnback" type="button">返回首页</button></a></p>';
+$('#searchList').append(strNull);
+$('#pageination').hide();
 
-    function changeState(obj) {
-        var block = $(obj).parent().parent().find("td");
-        var td5 = block.eq(5);
-        var open = block.eq(6);
-        console.log(open);
-        var data = block.eq(2).text();
-        $.ajax({
-            url:"/admin/changeState",
-            data: {"cardNumber":data},
-            dataType: "json",
-            success:function (s) {
-                //s = JSON.parse(s);
-                console.log(s);
-                if(s.state == "activated") {
-                    open.innerHTML="frozen";
-                    td5.innerHTML="";
-                    td5.innerHTML="frozen";
+}
 
-                } else {
-                    open.innerHTML = "activated";
-                    td5.innerHTML="";
-                    td5.innerHTML="activated";
-                }
-                showAccounts();
-            }
 
-        })
-    }
+}
 
-    function callDele(obj) {
-        var block = $(obj).parent().parent().find("td");
-        var data = block.eq(2).text();
-        $.ajax({
-            url: "/admin/delete",
-            data: {"cardNumber":data},
-            success:function (data) {
-                showAccounts();
-            }
-        })
-    }
+});
+}
 
-    function showAccounts() {
-        var pNode = document.getElementById("tb1");
-        var tbody = document.getElementsByTagName("tbody")[0];
-        if(tbody)
-            pNode.removeChild(tbody);
-        $.ajax({
-            url:"/admin/showAllAccounts",
-            dataType:"json",
-            success: function (data) {
-                console.log(data);
-                var j = 1;
-                var tb = document.createElement('tbody');
-                pNode.appendChild(tb);
-                for(var i in data) {
-                    var tr = document.createElement('tr');
-                    tb.appendChild(tr);
-                    var td1 = document.createElement('td');
-                    td1.innerHTML=j.toString();
-                    j++;
-                    var td2 = document.createElement('td');
-                    td2.innerHTML=data[i].cardNumber;
-                    var td3 = document.createElement('td');
-                    td3.innerHTML=data[i].balance;
-                    var td4 = document.createElement('td');
-                    td4.innerHTML=data[i].name;
-                    var td5 = document.createElement('td');
-                    td5.innerHTML=data[i].state;
-                    var td8 = document.createElement('td');
-                    td8.innerHTML=data[i].phoneNumber;
-                    tr.appendChild(td1);
-                    tr.appendChild(td8);
-                    tr.appendChild(td2);
-                    tr.appendChild(td3);
-                    tr.appendChild(td4);
-                    tr.appendChild(td5);
-                    var open = document.createElement('button');
-                    if(data[i].state == "activated") {
-                        open.innerHTML="frozen";
-                    } else open.innerHTML="activated";
-                    open.onclick = function () {
-                        changeState(this);
-                    };
-                    open.className = "open";
-                    var dele = document.createElement('button')
-                    dele.innerHTML="delete";
-                    dele.onclick= function () {
-                        callDele(this);
-                    };
-                    dele.className = "dele";
-                    var td6 = document.createElement('td');
-                    var td7 = document.createElement('td');
-                    td6.appendChild(open);
-                    td7.appendChild(dele);
-                    tr.appendChild(td6);
-                    tr.appendChild(td7);
-                }
-            }
-        })
-    }
+$('#serchId').on('keydown',function (event) {
+var e = event || window.event || arguments.callee.caller.arguments[0];
+if (e && e.keyCode==13) {
+searchAction();
+}
+})
 
-    function showActivated() {
-        var pNode = document.getElementById("tb1");
-        var tbody = document.getElementsByTagName("tbody")[0];
-        if(tbody)
-            pNode.removeChild(tbody);
-        $.ajax({
-            url:"/admin/showActivatedAccounts",
-            dataType:"json",
-            success: function (data) {
-                console.log(data);
-                var j = 1;
-                var tb = document.createElement('tbody');
-                pNode.appendChild(tb);
-                for(var i in data) {
-                    var tr = document.createElement('tr');
-                    tb.appendChild(tr);
-                    var td1 = document.createElement('td');
-                    td1.innerHTML=j.toString();
-                    j++;
-                    var td2 = document.createElement('td');
-                    td2.innerHTML=data[i].cardNumber;
-                    var td3 = document.createElement('td');
-                    td3.innerHTML=data[i].balance;
-                    var td4 = document.createElement('td');
-                    td4.innerHTML=data[i].name;
-                    var td5 = document.createElement('td');
-                    td5.innerHTML=data[i].state;
-                    var td8 = document.createElement('td');
-                    td8.innerHTML=data[i].phoneNumber;
-                    tr.appendChild(td1);
-                    tr.appendChild(td8);
-                    tr.appendChild(td2);
-                    tr.appendChild(td3);
-                    tr.appendChild(td4);
-                    tr.appendChild(td5);
-                    var open = document.createElement('button');
-                    if(data[i].state == "activated") {
-                        open.innerHTML="frozen";
-                    } else open.innerHTML="activated";
-                    open.onclick = function () {
-                        changeState(this);
-                    };
-                    open.className = "open";
-                    var dele = document.createElement('button')
-                    dele.innerHTML="delete";
-                    dele.onclick= function () {
-                        callDele(this);
-                    };
-                    dele.className = "dele";
-                    var td6 = document.createElement('td');
-                    var td7 = document.createElement('td');
-                    td6.appendChild(open);
-                    td7.appendChild(dele);
-                    tr.appendChild(td6);
-                    tr.appendChild(td7);
-                }
-            }
-        })
-    }
 
-    function showFrozen() {
-        var pNode = document.getElementById("tb1");
-        var tbody = document.getElementsByTagName("tbody")[0];
-        if(tbody)
-            pNode.removeChild(tbody);
-        $.ajax({
-            url:"/admin/showFrozenAccounts",
-            dataType:"json",
-            success: function (data) {
-                console.log(data);
-                var j = 1;
-                var tb = document.createElement('tbody');
-                pNode.appendChild(tb);
-                for(var i in data) {
-                    var tr = document.createElement('tr');
-                    tb.appendChild(tr);
-                    var td1 = document.createElement('td');
-                    td1.innerHTML=j.toString();
-                    j++;
-                    var td2 = document.createElement('td');
-                    td2.innerHTML=data[i].cardNumber;
-                    var td3 = document.createElement('td');
-                    td3.innerHTML=data[i].balance;
-                    var td4 = document.createElement('td');
-                    td4.innerHTML=data[i].name;
-                    var td5 = document.createElement('td');
-                    td5.innerHTML=data[i].state;
-                    var td8 = document.createElement('td');
-                    td8.innerHTML=data[i].phoneNumber;
-                    tr.appendChild(td1);
-                    tr.appendChild(td8);
-                    tr.appendChild(td2);
-                    tr.appendChild(td3);
-                    tr.appendChild(td4);
-                    tr.appendChild(td5);
-                    var open = document.createElement('button');
-                    if(data[i].state == "activated") {
-                        open.innerHTML="frozen";
-                    } else open.innerHTML="activated";
-                    open.onclick = function () {
-                        changeState(this);
-                    };
-                    open.className = "open";
-                    var dele = document.createElement('button')
-                    dele.innerHTML="delete";
-                    dele.onclick= function () {
-                        callDele(this);
-                    };
-                    dele.className = "dele";
-                    var td6 = document.createElement('td');
-                    var td7 = document.createElement('td');
-                    td6.appendChild(open);
-                    td7.appendChild(dele);
-                    tr.appendChild(td6);
-                    tr.appendChild(td7);
-                }
-            }
-        })
-    }
+//列表分页
+//perPage 每一页显示条数     current：当前第几页
+function pagination(perPage,current) {
+var tableData = document.getElementById("searchList");
+var totalCount=tableData.rows.length;  //总条数
 
-    function showRateTable() {
-        var pNode = document.getElementById("tb1");
-        pNode.style.display="none";
-        var id = document.getElementById("rateTable");
-        var left = 400;
-        var top = 140;
-        id.style.top=top;
-        id.style.left=left;
-        id.style.display="block";
-    }
+//设置表格总页数
+var totalPage=0;//列表的总页数
+var pageSize = perPage;
+if (totalCount/pageSize > parseInt(totalCount/pageSize)){
+totalPage = parseInt(totalCount/pageSize)+1;
+}else{
+totalPage = parseInt(totalCount/pageSize);
+}
+//对数据进行分页
+var currentPage=current;
+var startRow=(currentPage-1)*pageSize+1;
+var endRow=(currentPage*pageSize > totalCount ? totalCount : currentPage*pageSize);
 
-    function hideRateTable() {
-        var pNode = document.getElementById("tb1");
-        pNode.style.display="block";
-        document.getElementById("rateTable").style.display="none";
-    }
+for(var i=1;i<(totalCount+1);i++){
+var irow = tableData.rows[i-1];
+if(i>=startRow && i<=endRow){
+irow.style.display = "block";
+}else{
+irow.style.display = "none";
+}
+}
+//位置2 生成当前的点击按钮
+createBtns(totalPage , current);
+//位置3  绑定点击事件
+bindClick(totalPage);
 
+}
+//生成点击按钮
+//totalPages 分页的总页数
+//current当前页
+function createBtns(totalPages , current) {
+var tempStr = "";
+/*上一页按钮*/
+if (current > 1) {
+/* tempStr += "<span class='btn first' href=\"#\"  data-page = '1'>首页</span>";*/
+tempStr += "<span class='btn prev' href=\"#\" data-page = "+(current-1)+">上一页</span>"
+}
+/*中间页码的显示*/
+/*如果总页数超出5个处理办法*/
+if(totalPages<=5){
+for(var pageIndex= 1 ; pageIndex < totalPages+1; pageIndex++){
+tempStr += "<a  class='btn page"+pageIndex+"'  data-page = "+( pageIndex )+"><span>"+ pageIndex +"</span></a>";
+}
+}else{
+if(current<5){
+for(var pageIndex= 1 ; pageIndex < 5; pageIndex++){
+tempStr += "<a  class='btn page"+pageIndex+"'  data-page = "+( pageIndex )+"><span>"+ pageIndex +"</span></a>";
+}
+tempStr+='<span>......</span>';
+tempStr += "<a  class='btn page"+totalPages+"'  data-page = "+( totalPages )+"><span>"+ totalPages +"</span></a>";
+}else if(current>= totalPages-4){
+tempStr += "<a  class='btn page"+1+"'  data-page = "+( 1 )+"><span>"+ 1 +"</span></a>";
+tempStr+='<span>......</span>';
+for(var pageIndex= totalPages-4 ; pageIndex <= totalPages; pageIndex++){
+tempStr += "<a  class='btn page"+pageIndex+"'  data-page = "+( pageIndex )+"><span>"+ pageIndex +"</span></a>";
+}
+}else if(current>=5 && current <totalPages-4){
+tempStr += "<a  class='btn page"+1+"'  data-page = "+( 1 )+"><span>"+ 1 +"</span></a>";
+tempStr+='<span>......</span>';
+for(var pageIndex= current ; pageIndex <= current+4; pageIndex++){
+tempStr += "<a  class='btn page"+pageIndex+"'  data-page = "+( pageIndex )+"><span>"+ pageIndex +"</span></a>";
+}
+tempStr+='<span>......</span>';
+tempStr += "<a  class='btn page"+totalPages+"'  data-page = "+( totalPages )+"><span>"+ totalPages +"</span></a>";
+}
+}
+/*下一页按钮*/
+if (current < totalPages) {
+tempStr += "<span class='btn next' href=\"#\"  data-page = "+(current+1)+">下一页</span>";
+/*            tempStr += "<span class='btn last' href=\"#\" data-page = "+ (totalPages) +">尾页</span>";*/
+}
+document.getElementById("pageination").innerHTML = tempStr;
+}
+function bindClick(totalPage) {
+// 设置首页、末页、上一页、下一页的点击事件
+var buttonArr = ['first','last','prev','next'];
+for(var k in buttonArr){
+var $dom = '.'+buttonArr[k];
+$('body').delegate( $dom , 'click' , function () {
+var data = $(this).data('page');//获取当前按钮跳转的页数
+pagination('3' , data);//对页面进行分页
+//对当前页码的样式做处理
+$('.page'+data).css({background:'#0449d4',color:'#fff'}).siblings().css({background:'#fff',color:'#999'});
+})
+}
+
+// 设置数码的点击事件 totalImgPage是总页数，为全局变量，在分页时被赋值
+for (var k  = 1 ;k <= totalPage ; k++){
+var $singleDom  = '.page'+k;
+$('body').delegate( $singleDom , 'click' , function () {
+var data = $(this).data('page');
+pagination('3' , data);//对页面进行分页
+//对当前页码的样式做处理
+$('.page'+data).css({background:'#0449d4',color:'#fff'}).siblings().css({background:'#fff',color:'#999'});
+})
+}
+}
 </script>
 
-<div style="text-align:center;"></div>
-</body>
-
-</html>
+<script src="../js/jquery-3.6.0.min.js"></script>

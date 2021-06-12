@@ -15,4 +15,21 @@
         select * from user_information where idNumber=#{idNumber}
     </select>
 
+    <select id="getInfo" parameterType="String" resultType="UserInformation">
+        select * from user_information where phoneNumber=#{phoneNumber}
+    </select>
+
+    <update id="updateInfo" parameterType="UserInformation">
+        update user_information set name= case when #{name} is not null and #{name} != ''
+            then #{name}
+            else name
+            end, idNumber=case when#{idNumber} is not null and #{idNumber} != ''
+                then #{idNumber}
+                else idNumber
+                    end, sex=case when #{sex} is not null
+                        then #{sex}
+                        else sex
+                            end, birthday=case when #{birthday} is not null then #{birthday} else birthday end
+        where phoneNumber=#{phoneNumber}
+    </update>
 </mapper>

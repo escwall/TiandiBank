@@ -1,5 +1,6 @@
 package com.bank.service;
 
+import com.bank.entity.PageInfo;
 import com.bank.entity.TradeRecord;
 
 import java.util.List;

@@ -2,7 +2,6 @@ package com.bank.service.impl;
 import com.bank.dao.AdminDao;
 import com.bank.dao.CardUserDao;
 import com.bank.entity.Admin;
-import com.bank.entity.Card;
 import com.bank.entity.CardUser;
 import com.bank.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;

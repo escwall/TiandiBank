@@ -14,4 +14,10 @@ public interface LoginService {
     public Login check(String phoneNumber);
 
     public UserInformation checkAccount(String phoneNumber);
+
+    public String getPwByPhone(String phoneNumber);
+
+    public Integer changePw(String newPw, String phoneNumber);
+
+    public Double getLoanRate();
 }

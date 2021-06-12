@@ -6,6 +6,8 @@ import com.bank.service.OpenAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service("openAccountService")
 public class OpenAccountServiceImpl implements OpenAccountService {
@@ -20,5 +22,15 @@ public class OpenAccountServiceImpl implements OpenAccountService {
     @Override
     public UserInformation checkIdNum(String idNumber) {
         return userInformationDao.checkIdNum(idNumber);
+    }
+
+    @Override
+    public UserInformation getInfo(String phoneNumber) {
+        return userInformationDao.getInfo(phoneNumber);
+    }
+
+    @Override
+    public Integer updateInfo(UserInformation userInformation) {
+        return userInformationDao.updateInfo(userInformation);
     }
 }

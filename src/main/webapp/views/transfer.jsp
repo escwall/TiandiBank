@@ -14,7 +14,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transfer ${loginName}</title>
+    <title>Transfer</title>
 
     <style type="text/css">
         /*初始化属性*/
@@ -24,7 +24,7 @@
             box-sizing: border-box;
         }
         body{
-            background-image: url("../images/register.jpg");
+            background-image: url(../images/bg7.jpg);
             background-repeat: no-repeat;
             background-size: 100%;
         }
@@ -41,11 +41,13 @@
         }
 
         /*设置第一个P标签*/
+        /*这是那个大的transfer*/
         .explain p:first-child{
-            color: #ff956e;
-            font-size: 25px;
+            color: #FF0000;
+            font-size: 60px;
             margin-left: 10px;
             margin-top: 10px;
+            font-family: "Ink Free";
         }
 
         /*设置最后一个P标签*/
@@ -111,12 +113,19 @@
 
         /*设置提交按钮*/
         #sub{
-            width: 120px;
+            /*width: 120px;
             height: 40px;
             background-color: rgba(84,83,87,0.11);
             border: 1px solid #faf7f7;
             border-radius: 10px;
-            color: #deebff;
+            color: #deebff;*/
+            width: 120px;
+            height: 40px;
+            background: #d4af7a;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 100px;
+            font-size: 20px;
         }
         .subTd{
             text-align: center;
@@ -245,10 +254,10 @@
 
 
 
-            <fieldset>
-                <strong>Transfer</strong>
-                <table class="tableData">
-                    <div id="table">
+        <fieldset>
+            <strong></strong>
+            <table class="tableData">
+                <div id="table">
                     <tr>
                         <td class="dataTableLeft"><label><b>Sender CardNumber</b></label></td>
                         <td  class="dataTableRight">
@@ -308,14 +317,24 @@
                             <input type="submit" value="submit" id="sub" onclick="insertRecords()">
                         </td>
                     </tr>
-                    </div>
-                </table>
-            </fieldset>
+                </div>
+            </table>
+        </fieldset>
 
     </div>
 
     <div class="rightTip">
-        <a href="/views/mainPage.jsp"> <button>←Go Back</button></a>
+        <a href="/views/framework.jsp"> <button style="
+                                   position: relative;
+                                   top: 10px;
+                                   left: 0px;
+                                   width: 120px;
+                                   height: 40px;
+                                   background: #d4af7a;
+                                   text-transform: uppercase;
+                                   text-decoration: none;
+                                   border-radius: 100px;
+                                   font-size: 20px;">←Go Back</button></a>
 
     </div>
 
